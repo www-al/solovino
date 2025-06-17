@@ -1,0 +1,40 @@
+{
+  "data": 
+[
+  
+  ] ,
+  "categories": [
+    {
+      "id": 1,
+      "name": "VINO BLANCO"
+    },
+    {
+      "id": 2,
+      "name": "VINO TINTO"
+    },
+    {
+      "id": 3,
+      "name": "VINO ROSADO"
+    },
+    {
+      "id": 4,
+      "name": "VINO NARANJA"
+    },
+    {
+      "id": 5,
+      "name": "VINO ESPUMOSO"
+    },
+    {
+      "id": 6,
+      "name": "VINO NATURAL"
+    },
+    {
+      "id": 7,
+      "name": "LATAS"
+    },
+    {
+      "id": 8,
+      "name": "GRANEL"
+    }
+  ]
+}
