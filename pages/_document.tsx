@@ -8,9 +8,9 @@ export default function Document() {
         <link rel="stylesheet" href="https://use.typekit.net/gvo1vcm.css" />
       </Head>
       <body className="antialiased">
+        <Analytics />
         <Main />
         <NextScript />
-        <Analytics />
       </body>
     </Html>
   );
