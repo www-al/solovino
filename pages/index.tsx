@@ -9,6 +9,10 @@ import CartModal from '../components/CartModal';
 import MenuModal from '../components/MenuModal';
 import { Product, Category, CartItem, StoreInfo as StoreInfoType } from '../types';
 
+function slugify(text: string) {
+  return text.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
+}
+
 const Home: React.FC = () => {
   const [allProducts, setAllProducts] = useState<Product[]>([]);
   const [categories, setCategories] = useState<Category[]>([]);
@@ -18,6 +22,7 @@ const Home: React.FC = () => {
   const [isMenuModalOpen, setIsMenuModalOpen] = useState(false);
   const [fullscreenImageSrc, setFullscreenImageSrc] = useState<string | null>(null);
   const productsRef = useRef<HTMLDivElement>(null);
+  const cardRefs = useRef<(HTMLDivElement | null)[]>([]);
 
   // Store Info (static for now, can be fetched later)
   const storeInfo: StoreInfoType = {
@@ -90,6 +95,36 @@ const Home: React.FC = () => {
     setFullscreenImageSrc(null);
   }, []);
 
+  // Intersection Observer for updating URL hash based on scroll position
+  useEffect(() => {
+    if (!filteredProducts.length) return;
+    const observer = new window.IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting && entry.intersectionRatio > 0.5) {
+            const id = entry.target.id;
+            if (id && window.location.hash !== `#${id}`) {
+              window.history.replaceState(null, '', `#${id}`);
+            }
+          }
+        });
+      },
+      { threshold: 0.5 }
+    );
+    cardRefs.current.forEach((ref) => {
+      if (ref) observer.observe(ref);
+    });
+    return () => observer.disconnect();
+  }, [filteredProducts]);
+
+  // Scroll to anchor on load if hash is present
+  useEffect(() => {
+    if (window.location.hash) {
+      const el = document.getElementById(window.location.hash.substring(1));
+      if (el) el.scrollIntoView({ behavior: 'smooth' });
+    }
+  }, []);
+
   return (
     <div>
       <Head>
@@ -117,12 +152,13 @@ const Home: React.FC = () => {
               No hay productos disponibles
             </div>
           ) : (
-            filteredProducts.map((product) => (
+            filteredProducts.map((product, idx) => (
               <ProductCard
                 key={product.id}
                 product={product}
                 onAddToCart={handleAddToCart}
                 onImageClick={handleImageClick}
+                ref={el => { cardRefs.current[idx] = el; }}
               />
             ))
           )}
