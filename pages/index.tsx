@@ -9,10 +9,6 @@ import CartModal from '../components/CartModal';
 import MenuModal from '../components/MenuModal';
 import { Product, Category, CartItem, StoreInfo as StoreInfoType } from '../types';
 
-function slugify(text: string) {
-  return text.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
-}
-
 const Home: React.FC = () => {
   const [allProducts, setAllProducts] = useState<Product[]>([]);
   const [categories, setCategories] = useState<Category[]>([]);
